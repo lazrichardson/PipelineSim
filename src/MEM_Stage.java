@@ -35,55 +35,34 @@ public class MEM_Stage {
         return memWrite_WriteRegNum;
     }
 
-    public MEM_Stage(int exWrite_AluZero, int exWrite_AluResult, int exWrite_SwValue, int exWrite_WriteRegNum, ControlSignal exWrite_ControlSignal) {
+    public MEM_Stage(){ };
+
+    public void setMEMStage(int exWrite_AluZero, int exWrite_AluResult, int exWrite_SwValue, int exWrite_WriteRegNum, ControlSignal exWrite_ControlSignal) {
         // MEM READ-----------------------------------------------------------------------------------------------------
         this.memRead_AluZero = exWrite_AluZero;
         this.memRead_AluResult = exWrite_AluResult;
         this.memRead_SwValue = exWrite_SwValue;
         this.memRead_WriteRegNum = exWrite_WriteRegNum;
         this.memRead_ControlSignal = exWrite_ControlSignal;
+        // MEM WRITE----------------------------------------------------------------------------------------------------
+        memWrite_AluResult   = memRead_AluResult;
+        memWrite_WriteRegNum = memRead_WriteRegNum;
+        memWrite_ControlSignal = memRead_ControlSignal;
+    }
 
+    public void printMemRead(){
         System.out.println("\nMEM Read");
         System.out.println("memRead_CalcBTA  X");
         System.out.println("memRead_AluZero  " + memRead_AluZero);
         System.out.println("memRead_AluResult  " + Integer.toHexString(memRead_AluResult));
         System.out.println("memRead_SwValue  " + Integer.toHexString(memRead_SwValue));
         System.out.println("memRead_WriteRegNum  " + memRead_WriteRegNum);
+    }
 
-        // MEM WRITE----------------------------------------------------------------------------------------------------
-        memWrite_AluResult   = memRead_AluResult;
-        memWrite_WriteRegNum = memRead_WriteRegNum;
-        memWrite_ControlSignal = memRead_ControlSignal;
-
+    public void printMemWrite(){
         System.out.println("\nMEM Write");
         System.out.println("memWrite_LWDataValue  " + memWrite_LWDataValue);
         System.out.println("memRead_AluResult  " + Integer.toHexString(memWrite_AluResult));
         System.out.println("memRead_WriteRegNum  " + memWrite_WriteRegNum);
     }
-
-        /*
-        pipeline.memRead_AluZero     = pipeline.exWrite_AluZero;
-        pipeline.memRead_AluResult   = pipeline.exWrite_AluResult;
-        pipeline.memRead_SwValue     = pipeline.exWrite_SwValue;
-        pipeline.memRead_WriteRegNum = pipeline.exWrite_WriteRegNum;
-
-        System.out.println("\nMEM Read");
-        pipeline.memRead_ControlSignal = pipeline.exWrite_ControlSignal;
-        System.out.println("memRead_CalcBTA  X");
-        System.out.println("memRead_AluZero  " + pipeline.memRead_AluZero);
-        System.out.println("memRead_AluResult  " + Integer.toHexString(pipeline.memRead_AluResult));
-        System.out.println("memRead_SwValue  " + Integer.toHexString(pipeline.memRead_SwValue));
-        System.out.println("memRead_WriteRegNum  " + pipeline.memRead_WriteRegNum);
-
-
-        // MEM WRITE----------------------------------------------------------------------------------------------------
-        pipeline.memWrite_AluResult   = pipeline.memRead_AluResult;
-        pipeline.memWrite_WriteRegNum = pipeline.memRead_WriteRegNum;
-
-        System.out.println("\nMEM Write");
-        System.out.println("memWrite_LWDataValue  " + pipeline.memWrite_LWDataValue);
-        System.out.println("memRead_AluResult  " + Integer.toHexString(pipeline.memWrite_AluResult));
-        System.out.println("memRead_WriteRegNum  " + pipeline.memWrite_WriteRegNum);
-
-                  */
 }
