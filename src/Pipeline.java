@@ -1,11 +1,12 @@
 public class Pipeline {
 
     Memory memory = new Memory();
-    int cycleCount = -1;
+    int cycleCount;
     int[] instructionCache = {
             0x00000000,
-            0x00625022, // added for testing
             0x00a63820, // added for testing
+            0x00000000,
+            0x00625022 // added for testing
             /*
             0xa1020000,
             0x810AFFFC,
@@ -20,17 +21,19 @@ public class Pipeline {
             0x00000000,
             0x00000000
             */
-            };
+    };
 
     public int getCycleCount() {
         return cycleCount;
     }
+
     public Memory getMemory() {
         return memory;
     }
-    public Pipeline(){
 
-    };
+    public Pipeline() {
+        this.cycleCount = 0;
+    }
 
     // IF
     IF_Stage if_stage = new IF_Stage();

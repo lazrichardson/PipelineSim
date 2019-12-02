@@ -4,9 +4,11 @@ public class IF_Stage {
             Put it in the WRITE version of the IF/ID pipeline register.
              */
     int controlBit = 0;
-    public void setControlBit(int controlBit){
+
+    public void setControlBit(int controlBit) {
         this.controlBit = controlBit;
     }
+
     public int getControlBit() {
         return controlBit;
     }
@@ -24,11 +26,18 @@ public class IF_Stage {
     int ifWrite_Instruction; // IF start
 
 
-    public IF_Stage(){};
+    public IF_Stage() {
+    }
 
-    public void setIfStage(int ifRead_ProgramCounter, Pipeline pipeline){
+    public void setIfStage(int ifRead_ProgramCounter, Pipeline pipeline) {
+
         this.ifWrite_ProgramCounter = ifRead_ProgramCounter;
-        this.ifWrite_Instruction = pipeline.instructionCache[ifWrite_ProgramCounter];
+
+        if (pipeline.cycleCount > (pipeline.instructionCache.length - 1)){
+            this.ifWrite_Instruction = 0x00000000;
+        }else {
+            this.ifWrite_Instruction = pipeline.instructionCache[pipeline.cycleCount];
+        }
         System.out.println("\nIF Write\n" + Integer.toHexString(ifWrite_Instruction));
     }
 

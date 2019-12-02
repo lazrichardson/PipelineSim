@@ -44,11 +44,12 @@ public class EX_Stage {
         return exWrite_WriteRegNum;
     }
 
-    public EX_Stage(){
+    public EX_Stage() {
 
-    };
+    }
+
     public void setEXStage(ControlSignal idWrite_ControlSignal, int idWrite_ProgramCounter, int idWrite_ReadData1, int idWrite_ReadData2,
-                    int idWrite_SignExtendedOffset, int idWrite_WriteRegister_20_16, int idWrite_WriteRegister_15_11, int idWrite_RFormatFunc) {
+                           int idWrite_SignExtendedOffset, int idWrite_WriteRegister_20_16, int idWrite_WriteRegister_15_11, int idWrite_RFormatFunc) {
         // EX READ------------------------------------------------------------------------------------------------------
         /* EX Stage
             Here you'll perform the requested instruction on the specific operands you read out of the READ version of the IDEX pipeline register.
@@ -120,9 +121,9 @@ public class EX_Stage {
         }
     }
 
-    public void printExRead(){
+    public void printExRead() {
         System.out.println("\nEX Read");
-        System.out.println("Incr PC  " + exRead_ProgramCounter);
+        System.out.println("Incr PC  " + Integer.toHexString(exRead_ProgramCounter));
         System.out.println("ReadReg1Value  " + Integer.toHexString(exRead_ReadData1));
         System.out.println("ReadReg2Value  " + Integer.toHexString(exRead_ReadData2));
         System.out.println("SEOffset  X");
@@ -131,7 +132,7 @@ public class EX_Stage {
         System.out.println("Function  " + Integer.toHexString(exRead_RFormatFunc));
     }
 
-    public void printExWrite(){
+    public void printExWrite() {
         System.out.println("\nEX Write");
         System.out.println("exWrite_CalcBTA  X");
         System.out.println("exWrite_AluZero  " + exWrite_AluZero);

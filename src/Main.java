@@ -4,23 +4,15 @@ public class Main {
 
         Pipeline pipeline = new Pipeline();
 
-        int cycle = 0;
         int controlBit = 0;
+        int programCounter = 0x7A000;
 
-        // remove instructions from the program counter, maybe implement them as a stack
+        while (pipeline.cycleCount < pipeline.instructionCache.length) {
 
-        while (cycle < pipeline.instructionCache.length * 8) {
-
-            System.out.println("\n" + cycle + " ----------------------------------------------------------------------");
-
-            if(cycle > pipeline.instructionCache.length){
-                pipeline.cycleCount = 0;
-            }else {
-                pipeline.cycleCount = pipeline.cycleCount + 1;
-            }
+            System.out.println("\n" + pipeline.cycleCount + " ----------------------------------------------------------------------");
 
             // IF     ------------------------------------------------------------------------------------------------------
-            pipeline.if_stage.setIfStage(pipeline.getCycleCount(), pipeline);
+            pipeline.if_stage.setIfStage(programCounter, pipeline);
 
             // ID     ------------------------------------------------------------------------------------------------------
             if (controlBit == 1) {
@@ -32,7 +24,6 @@ public class Main {
                 pipeline.id_write = pipeline.id_read;
             }
             pipeline.id_write.printIdWrite();
-
 
             // EX     ------------------------------------------------------------------------------------------------------
             if (controlBit == 1) {
@@ -51,7 +42,6 @@ public class Main {
             pipeline.ex_read.printExRead();
             pipeline.ex_write.printExWrite();
 
-
             // MEM     -----------------------------------------------------------------------------------------------------
             if (controlBit == 1) {
                 pipeline.mem_read.setMEMStage(
@@ -67,8 +57,6 @@ public class Main {
             pipeline.mem_write.printMemWrite();
 
             // WB READ----------------------------------------------------------------------------------------------------
-
-
             if (controlBit == 1) {
                 pipeline.wb_read.setWBStage(
                         pipeline.mem_read.getMemWrite_ControlSignal(),
@@ -82,19 +70,17 @@ public class Main {
             pipeline.wb_write.printWBStage();
 
             // set the control bits to manage the pipeline
-            if (cycle == 1) {
+            if (pipeline.cycleCount == 1) {
                 controlBit = 1;
-            } else if (cycle % 2 == 0) {
+            } else if (pipeline.cycleCount % 2 == 0) {
                 controlBit = 0;
             } else {
                 controlBit = 1;
             }
+            System.out.println("\n" + pipeline.cycleCount + " ----------------------------------------------------------------------");
 
-            System.out.println("\n" + cycle + " ----------------------------------------------------------------------");
-
-            cycle = cycle + 1;
-
+            pipeline.cycleCount = pipeline.cycleCount + 1;
+            programCounter = programCounter + 1;
         }
     }
-
 }  // class end

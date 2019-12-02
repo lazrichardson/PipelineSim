@@ -33,7 +33,9 @@ public class ID_Stage {
     }
 
     // ID WRITE
-    public ID_Stage(){};
+    public ID_Stage() {
+    }
+
     ControlSignal idWrite_ControlSignal; // control signal
     int idWrite_ProgramCounter; // ID end
     int idWrite_ReadData1; // ID end
@@ -48,7 +50,7 @@ public class ID_Stage {
 
     int idWrite_RFormatFunc;
 
-    public void setIDStage(int ifWrite_ProgramCounter, int ifWrite_Instruction, Memory memory){
+    public void setIDStage(int ifWrite_ProgramCounter, int ifWrite_Instruction, Memory memory) {
 
         this.idRead_ProgramCounter = ifWrite_ProgramCounter;
         this.idRead_Instruction = ifWrite_Instruction;
@@ -69,9 +71,9 @@ public class ID_Stage {
         idWrite_RFormatFunc = instruction.rFormatFunc;
     }
 
-    public void printIdWrite(){
+    public void printIdWrite() {
         System.out.println("\nID Write");
-        System.out.println("Incr PC  " + idWrite_ProgramCounter);
+        System.out.println("Incr PC  " + Integer.toHexString(idWrite_ProgramCounter));
         System.out.println("ReadReg1Value  " + Integer.toHexString(idWrite_ReadData1));
         System.out.println("ReadReg2Value  " + Integer.toHexString(idWrite_ReadData2));
         System.out.println("SEOffset  X");

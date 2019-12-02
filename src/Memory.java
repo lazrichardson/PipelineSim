@@ -1,7 +1,7 @@
 public class Memory {
 
     int[] Regs = new int[32];
-    int [] Main_Mem = new int [1024];
+    int[] Main_Mem = new int[1024];
 
 
     public Memory() {
@@ -10,10 +10,9 @@ public class Memory {
         for (int i = 0; i < Regs.length; i++) {
             // int regStart = 0x100; change this back
             int regStart = 0x30000;
-            if (i == 0){
+            if (i == 0) {
                 Regs[i] = 0;
-            }
-            else{
+            } else {
                 Regs[i] = regStart + i;
             }
         }
