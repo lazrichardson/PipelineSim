@@ -13,16 +13,13 @@ public class ID_Stage {
     int idWrite_WriteRegister_15_11; // ID end
     int idWrite_RFormatFunc;
 
-    public ID_Stage(){};
+    public ID_Stage(IF_Stage if_stage, Memory memory) {
 
-    public ID_Stage(int ifWrite_ProgramCounter, int ifWrite_Instruction, Memory memory) {
-
-        this.idRead_ProgramCounter = ifWrite_ProgramCounter;
-        this.idRead_Instruction = ifWrite_Instruction;
+        this.idRead_ProgramCounter = if_stage.ifWrite_ProgramCounter;
+        this.idRead_Instruction = if_stage.ifWrite_Instruction;
 
         Instruction instruction = new Instruction(idRead_Instruction);
         this.idWrite_ControlSignal = new ControlSignal(instruction);
-
         System.out.println("\nID Read");
         instruction.printDetailCodes();
 
@@ -34,6 +31,7 @@ public class ID_Stage {
         idWrite_WriteRegister_15_11 = instruction.rFormatRegDest;
         idWrite_WriteRegister_20_16 = instruction.getRegSrcTwo();
         idWrite_RFormatFunc = instruction.rFormatFunc;
+        printIdWrite();
     }
 
     public void printIdWrite() {

@@ -2,71 +2,55 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Pipeline pipeline = new Pipeline();
+        int[] instructionCache = {
+                0x00000000,
+                0x00625022, // added for testing
+                0x00a63820, // added for testing
+                /*
+                0xa1020000,
+                0x810AFFFC,
+                0x00831820,
+                0x01263820,
+                0x01224820,
+                0x81180000,
+                0x81510010,
+                0x00624022,
+                0x00000000,
+                0x00000000,
+                0x00000000,
+                0x00000000
+                */
+        };
+        int controlBit = 0;
+        int cycleCount = 0;
+        int programCounter = 0;
+        Memory memory = new Memory();
 
-        pipeline.controlBit = 0;
+        while (cycleCount < instructionCache.length) {
 
-        while (pipeline.cycleCount < pipeline.instructionCache.length) {
-
-            System.out.println("\n" + pipeline.cycleCount + " ----------------------------------------------------------------------");
+            System.out.println("\n" + cycleCount + " ----------------------------------------------------------------------");
 
             // IF     ------------------------------------------------------------------------------------------------------
-            pipeline.createIfStage();
-
+            IF_Stage if_stage = new IF_Stage(cycleCount, programCounter, instructionCache);
 
             // ID     ------------------------------------------------------------------------------------------------------
-            if (pipeline.controlBit == 1) {
-                pipeline.createIdReadStage();
-            } else {
-                pipeline.id_write = pipeline.id_read;
-            }
-            pipeline.id_write.printIdWrite();
-/*
+            ID_Stage id_stage = new ID_Stage(if_stage, memory);
+
             // EX     ------------------------------------------------------------------------------------------------------
-            if (pipeline.controlBit == 1) {
-                pipeline.createExReadStage();
-            } else {
-                pipeline.createExWriteStage();
-            }
-            pipeline.ex_read.printExRead();
-            pipeline.ex_write.printExWrite();
+            EX_Stage ex_stage = new EX_Stage(id_stage);
 
             // MEM     -----------------------------------------------------------------------------------------------------
-            if (pipeline.controlBit == 1) {
-                pipeline.createMemReadStage();
-            } else {
-                pipeline.createMemWriteStage();
-                pipeline.mem_write = pipeline.mem_read;
-            }
-            pipeline.mem_read.printMemRead();
-            pipeline.mem_write.printMemWrite();
+            MEM_Stage mem_stage = new MEM_Stage(ex_stage);
 
-            // WB READ----------------------------------------------------------------------------------------------------
-            if (pipeline.controlBit == 1) {
-                pipeline.createWbReadStage();
+            // WB      -----------------------------------------------------------------------------------------------------
+            WB_Stage wb_stage = new WB_Stage(mem_stage, memory);
 
-            } else {
-                pipeline.createWbWriteStage();
-                pipeline.wb_write = pipeline.wb_read;
-            }
-            pipeline.wb_write.printWBStage();
-            /
- */
+            System.out.println("\n" + cycleCount + " ----------------------------------------------------------------------");
 
-            System.out.println("\n" + pipeline.cycleCount + " ----------------------------------------------------------------------");
-
-            // set the control bits to manage the pipeline
-            if (pipeline.cycleCount == 1) {
-                pipeline.controlBit = 1;
-            } else if (pipeline.cycleCount % 2 == 0) {
-                pipeline.controlBit = 0;
-            } else {
-                pipeline.controlBit = 1;
-            }
 
             // increment all of the counters
-            pipeline.cycleCount = pipeline.cycleCount + 1;
-            pipeline.programCounter = pipeline.programCounter + 4;
+            cycleCount = cycleCount + 1;
+            programCounter = programCounter + 4;
         }
     }
 }  // class end

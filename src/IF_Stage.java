@@ -11,9 +11,17 @@ public class IF_Stage {
     public IF_Stage() {
     }
 
-    public IF_Stage(int ifRead_ProgramCounter, int instruction) {
+    public IF_Stage(int cycleCount, int programCounter, int[] instructionCache) {
 
-        this.ifWrite_ProgramCounter = ifRead_ProgramCounter;
+        int instruction;
+
+        if (cycleCount > (instructionCache.length - 1)) {
+            instruction = 0x00000000;
+        } else {
+            instruction = instructionCache[cycleCount];
+        }
+
+        this.ifWrite_ProgramCounter = programCounter;
         this.ifWrite_Instruction = instruction;
 
         System.out.println("\nIF Write\n" + Integer.toHexString(ifWrite_Instruction));

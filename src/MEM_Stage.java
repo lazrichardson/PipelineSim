@@ -19,36 +19,20 @@ public class MEM_Stage {
     int memWrite_AluResult; // mem end
     int memWrite_WriteRegNum; // mem end
 
-    public ControlSignal getMemWrite_ControlSignal() {
-        return memWrite_ControlSignal;
-    }
-
-    public int getMemWrite_LWDataValue() {
-        return memWrite_LWDataValue;
-    }
-
-    public int getMemWrite_AluResult() {
-        return memWrite_AluResult;
-    }
-
-    public int getMemWrite_WriteRegNum() {
-        return memWrite_WriteRegNum;
-    }
-
-    public MEM_Stage() {
-    }
-
-    public void setMEMStage(int exWrite_AluZero, int exWrite_AluResult, int exWrite_SwValue, int exWrite_WriteRegNum, ControlSignal exWrite_ControlSignal) {
+    public  MEM_Stage(EX_Stage ex_stage) {
         // MEM READ-----------------------------------------------------------------------------------------------------
-        this.memRead_AluZero = exWrite_AluZero;
-        this.memRead_AluResult = exWrite_AluResult;
-        this.memRead_SwValue = exWrite_SwValue;
-        this.memRead_WriteRegNum = exWrite_WriteRegNum;
-        this.memRead_ControlSignal = exWrite_ControlSignal;
+        this.memRead_AluZero = ex_stage.exWrite_AluZero;
+        this.memRead_AluResult = ex_stage.exWrite_AluResult;
+        this.memRead_SwValue = ex_stage.exWrite_SwValue;
+        this.memRead_WriteRegNum = ex_stage.exWrite_WriteRegNum;
+        this.memRead_ControlSignal = ex_stage.exWrite_ControlSignal;
         // MEM WRITE----------------------------------------------------------------------------------------------------
         memWrite_AluResult = memRead_AluResult;
         memWrite_WriteRegNum = memRead_WriteRegNum;
         memWrite_ControlSignal = memRead_ControlSignal;
+
+        printMemRead();
+        printMemWrite();
     }
 
     public void printMemRead() {

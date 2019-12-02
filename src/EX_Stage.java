@@ -1,5 +1,8 @@
 public class EX_Stage {
-
+    /* EX Stage
+               Here you'll perform the requested instruction on the specific operands you read out of the READ version of the IDEX pipeline register.
+               Then, write the appropriate values to the WRITE version of the EX/MEM pipeline register.
+            */
     // EX READ
     ControlSignal exRead_ControlSignal; // control signal
     int exRead_ProgramCounter; // EX start
@@ -44,25 +47,16 @@ public class EX_Stage {
         return exWrite_WriteRegNum;
     }
 
-    public EX_Stage() {
-
-    }
-
-    public void setEXStage(ControlSignal idWrite_ControlSignal, int idWrite_ProgramCounter, int idWrite_ReadData1, int idWrite_ReadData2,
-                           int idWrite_SignExtendedOffset, int idWrite_WriteRegister_20_16, int idWrite_WriteRegister_15_11, int idWrite_RFormatFunc) {
+    public  EX_Stage(ID_Stage id_stage) {
         // EX READ------------------------------------------------------------------------------------------------------
-        /* EX Stage
-            Here you'll perform the requested instruction on the specific operands you read out of the READ version of the IDEX pipeline register.
-            Then, write the appropriate values to the WRITE version of the EX/MEM pipeline register.
-         */
-        this.exRead_ControlSignal = idWrite_ControlSignal;
-        this.exRead_ProgramCounter = idWrite_ProgramCounter;
-        this.exRead_ReadData1 = idWrite_ReadData1;
-        this.exRead_ReadData2 = idWrite_ReadData2;
-        this.exRead_SignExtendedOffset = idWrite_SignExtendedOffset;
-        this.exRead_WriteRegister_20_16 = idWrite_WriteRegister_20_16;
-        this.exRead_WriteRegister_15_11 = idWrite_WriteRegister_15_11;
-        this.exRead_RFormatFunc = idWrite_RFormatFunc;
+        this.exRead_ControlSignal = id_stage.idWrite_ControlSignal;
+        this.exRead_ProgramCounter = id_stage.idWrite_ProgramCounter;
+        this.exRead_ReadData1 = id_stage.idWrite_ReadData1;
+        this.exRead_ReadData2 = id_stage.idWrite_ReadData2;
+        this.exRead_SignExtendedOffset = id_stage.idWrite_SignExtendedOffset;
+        this.exRead_WriteRegister_20_16 = id_stage.idWrite_WriteRegister_20_16;
+        this.exRead_WriteRegister_15_11 = id_stage.idWrite_WriteRegister_15_11;
+        this.exRead_RFormatFunc = id_stage.idWrite_RFormatFunc;
 
         // EX WRITE-----------------------------------------------------------------------------------------------------
         exWrite_ControlSignal = exRead_ControlSignal;
@@ -119,6 +113,9 @@ public class EX_Stage {
         } else if (exRead_ControlSignal.getRegisterDestination() == 0) {
             exWrite_WriteRegNum = exRead_WriteRegister_20_16;
         }
+
+        printExRead();
+        printExWrite();
     }
 
     public void printExRead() {
