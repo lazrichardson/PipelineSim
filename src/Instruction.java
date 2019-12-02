@@ -1,5 +1,4 @@
 public class Instruction {
-
     /*
    opcode, is always contained in bits 31:26.
             ■ The two registers to be read are always specified by the rs and rt fields, at positions 25:21 and 20:16.
@@ -9,7 +8,6 @@ public class Instruction {
             ■ The destination register is in one of two places. For a load it is in bit positions 20:16 (rt), while for an R-type instruction it is in bit positions 15:11 (rd).
                 Thus, we will need to add a multiplexor to select which field of the instruction is used to indicate the register number to be written.
      */
-
     int instr;
     int opCode;
     int regSrcOne;
@@ -25,68 +23,16 @@ public class Instruction {
         findCodeName();
     }
 
-    public int getInstr() {
-        return instr;
-    }
-
-    public void setInstr(int instr) {
-        this.instr = instr;
-    }
-
-    public int getOpCode() {
-        return opCode;
-    }
-
-    public void setOpCode(int opCode) {
-        this.opCode = opCode;
-    }
-
     public int getRegSrcOne() {
         return regSrcOne;
-    }
-
-    public void setRegSrcOne(int regSrcOne) {
-        this.regSrcOne = regSrcOne;
     }
 
     public int getRegSrcTwo() {
         return regSrcTwo;
     }
 
-    public void setRegSrcTwo(int regSrcTwo) {
-        this.regSrcTwo = regSrcTwo;
-    }
-
-    public int getrFormatRegDest() {
-        return rFormatRegDest;
-    }
-
-    public void setrFormatRegDest(int rFormatRegDest) {
-        this.rFormatRegDest = rFormatRegDest;
-    }
-
-    public int getrFormatFunc() {
-        return rFormatFunc;
-    }
-
-    public void setrFormatFunc(int rFormatFunc) {
-        this.rFormatFunc = rFormatFunc;
-    }
-
-    public int getiFormatOffset() {
-        return iFormatOffset;
-    }
-
-    public void setiFormatOffset(int iFormatOffset) {
-        this.iFormatOffset = iFormatOffset;
-    }
-
     public String getCodeName() {
         return codeName;
-    }
-
-    public void setCodeName(String codeName) {
-        this.codeName = codeName;
     }
 
     // opcode translations

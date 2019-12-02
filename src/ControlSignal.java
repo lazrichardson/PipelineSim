@@ -1,6 +1,5 @@
 public class ControlSignal {
 
-
     private int aluSource;
     private int aluOperation;
     private int memoryRead;
@@ -18,26 +17,9 @@ public class ControlSignal {
         return aluOperation;
     }
 
-    public int getMemoryRead() {
-        return memoryRead;
-    }
-
-    public int getMemoryWrite() {
-        return memoryWrite;
-    }
-
-    public int getBranch() {
-        return branch;
-    }
-
-    public int getMemoryToRegister() {
-        return memoryToRegister;
-    }
-
     public int getRegisterWrite() {
         return registerWrite;
     }
-
 
     public ControlSignal(Instruction instr) {
 
@@ -80,35 +62,8 @@ public class ControlSignal {
         }
     }
 
-
     public int getRegisterDestination() {
         return registerDestination;
-    }
-
-    public void getIdExControlSignal(int registerDestination, int aluSource, int aluOperation, int memoryRead,
-                                     int memoryWrite, int branch, int memoryToRegister, int registerWrite) {
-
-        this.registerDestination = registerDestination;
-        this.aluSource = aluSource;
-        this.aluOperation = aluOperation;
-        this.memoryRead = memoryRead;
-        this.memoryWrite = memoryWrite;
-        this.branch = branch;
-        this.memoryToRegister = memoryToRegister;
-        this.registerWrite = registerWrite;
-    }
-
-    public void getExMemControlSignal(int memoryRead, int memoryWrite, int branch, int memoryToRegister, int registerWrite) {
-        this.memoryRead = memoryRead;
-        this.memoryWrite = memoryWrite;
-        this.branch = branch;
-        this.memoryToRegister = memoryToRegister;
-        this.registerWrite = registerWrite;
-    }
-
-    public void getMemWbControlSignal(int memoryToRegister, int registerWrite) {
-        this.memoryToRegister = memoryToRegister;
-        this.registerWrite = registerWrite;
     }
 
     public void printControlSignal() {

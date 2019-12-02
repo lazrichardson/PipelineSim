@@ -3,41 +3,19 @@ public class IF_Stage {
             You will fetch the next instruction out of the Instruction Cache.
             Put it in the WRITE version of the IF/ID pipeline register.
              */
-    int controlBit = 0;
-
-    public void setControlBit(int controlBit) {
-        this.controlBit = controlBit;
-    }
-
-    public int getControlBit() {
-        return controlBit;
-    }
-
-    public int getIfWrite_ProgramCounter() {
-        return ifWrite_ProgramCounter;
-    }
-
-    public int getIfWrite_Instruction() {
-        return ifWrite_Instruction;
-    }
 
     // IF WRITE
     int ifWrite_ProgramCounter; // IF start
     int ifWrite_Instruction; // IF start
 
-
     public IF_Stage() {
     }
 
-    public void setIfStage(int ifRead_ProgramCounter, Pipeline pipeline) {
+    public IF_Stage(int ifRead_ProgramCounter, int instruction) {
 
         this.ifWrite_ProgramCounter = ifRead_ProgramCounter;
+        this.ifWrite_Instruction = instruction;
 
-        if (pipeline.cycleCount > (pipeline.instructionCache.length - 1)){
-            this.ifWrite_Instruction = 0x00000000;
-        }else {
-            this.ifWrite_Instruction = pipeline.instructionCache[pipeline.cycleCount];
-        }
         System.out.println("\nIF Write\n" + Integer.toHexString(ifWrite_Instruction));
     }
 
