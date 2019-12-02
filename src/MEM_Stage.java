@@ -5,6 +5,7 @@ public class MEM_Stage {
                 2. get the value that is there.
             Else, pass information from the READ version of the EX_MEM pipeline register to the WRITE version of MEM_WB.
                              */
+    int cycleCount;
     // MEM READ
     ControlSignal memRead_ControlSignal; // control signal
     int memRead_CalcBTA; // DON'T NEED TO IMPLEMENT
@@ -19,7 +20,8 @@ public class MEM_Stage {
     int memWrite_AluResult; // mem end
     int memWrite_WriteRegNum; // mem end
 
-    public MEM_Stage(EX_Stage ex_stage, int init) {
+    public MEM_Stage(EX_Stage ex_stage, int init, int cycleCount) {
+        this.cycleCount = cycleCount;
         // MEM READ-----------------------------------------------------------------------------------------------------
         this.memRead_AluZero = ex_stage.exWrite_AluZero;
         this.memRead_AluResult = ex_stage.exWrite_AluResult;

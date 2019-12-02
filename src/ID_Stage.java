@@ -1,5 +1,7 @@
 public class ID_Stage {
 
+
+    int cycleCount;
     // ID READ
     int idRead_ProgramCounter; // ID start
     int idRead_Instruction; // ID start
@@ -14,7 +16,10 @@ public class ID_Stage {
     int idWrite_RFormatFunc;
     Instruction instruction;
 
-    public ID_Stage(IF_Stage if_stage, Memory memory, int init) {
+    public ID_Stage(IF_Stage if_stage, Memory memory, int init, int cycleCount) {
+
+        this.cycleCount = cycleCount;
+
 
         this.idRead_ProgramCounter = if_stage.ifWrite_ProgramCounter;
         this.idRead_Instruction = if_stage.ifWrite_Instruction;

@@ -29,10 +29,10 @@ public class Main {
         int programCounter = 0;
         Memory memory = new Memory();
         IF_Stage if_stage = new IF_Stage(0, 0, initInstruction, 1);
-        ID_Stage id_stage = new ID_Stage(if_stage, memory, 1);
-        EX_Stage ex_stage = new EX_Stage(id_stage, 1);
-        MEM_Stage mem_stage = new MEM_Stage(ex_stage, 1);
-        WB_Stage wb_stage = new WB_Stage(mem_stage, memory, 1);
+        ID_Stage id_stage = new ID_Stage(if_stage, memory, 1,0);
+        EX_Stage ex_stage = new EX_Stage(id_stage, 1,0);
+        MEM_Stage mem_stage = new MEM_Stage(ex_stage, 1,0);
+        WB_Stage wb_stage = new WB_Stage(mem_stage, memory, 1,0);
 
         while (cycleCount < instructionCache.length) {
 
@@ -41,19 +41,18 @@ public class Main {
             if_stage = new IF_Stage(cycleCount, programCounter, instructionCache, 0);
 
             // ID     ------------------------------------------------------------------------------------------------------
-            id_stage = new ID_Stage(if_stage, memory, 0);
+            id_stage = new ID_Stage(if_stage, memory, 0, cycleCount);
 
             // EX     ------------------------------------------------------------------------------------------------------
-            ex_stage = new EX_Stage(id_stage, 0);
+            ex_stage = new EX_Stage(id_stage, 0, cycleCount);
 
             // MEM     -----------------------------------------------------------------------------------------------------
-            mem_stage = new MEM_Stage(ex_stage, 0);
+            mem_stage = new MEM_Stage(ex_stage, 0, cycleCount);
 
             // WB      -----------------------------------------------------------------------------------------------------
-            wb_stage = new WB_Stage(mem_stage, memory, 0);
+            wb_stage = new WB_Stage(mem_stage, memory, 0, cycleCount);
 
             System.out.println("\n" + cycleCount + " ----------------------------------------------------------------------");
-
 
             // increment all of the counters
             cycleCount = cycleCount + 1;

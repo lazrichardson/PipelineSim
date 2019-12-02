@@ -4,6 +4,7 @@ public class EX_Stage {
                Then, write the appropriate values to the WRITE version of the EX/MEM pipeline register.
             */
     // EX READ
+    int cycleCount;
     ControlSignal exRead_ControlSignal; // control signal
     int exRead_ProgramCounter; // EX start
     int exRead_ReadData1; // EX start
@@ -47,7 +48,8 @@ public class EX_Stage {
         return exWrite_WriteRegNum;
     }
 
-    public  EX_Stage(ID_Stage id_stage, int init) {
+    public  EX_Stage(ID_Stage id_stage, int init, int cycleCount) {
+        this.cycleCount = cycleCount;
         // EX READ------------------------------------------------------------------------------------------------------
         this.exRead_ControlSignal = id_stage.idWrite_ControlSignal;
         this.exRead_ProgramCounter = id_stage.idWrite_ProgramCounter;

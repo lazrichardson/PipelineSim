@@ -2,13 +2,15 @@ public class WB_Stage {
     /* WB STAGE
            Write to the registers based on information you read out of the READ version of MEM_WB.
          */
+    int cycleCount;
     // WB READ
     int wbRead_LWDataValue; // mem end
     int wbRead_AluResult; // mem end
     int wbRead_WriteRegNum; // mem end
     ControlSignal memWrite_ControlSignal;
 
-    public WB_Stage(MEM_Stage mem_stage, Memory memory, int init) {
+    public WB_Stage(MEM_Stage mem_stage, Memory memory, int init, int cycleCount) {
+        this.cycleCount = cycleCount;
         memWrite_ControlSignal = mem_stage.memRead_ControlSignal;
         wbRead_LWDataValue = mem_stage.memWrite_LWDataValue;
         wbRead_AluResult = mem_stage.memWrite_AluResult;
