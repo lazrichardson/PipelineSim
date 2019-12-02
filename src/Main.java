@@ -2,6 +2,9 @@ public class Main {
 
     public static void main(String[] args) {
 
+        int[] initInstruction = {
+                0x00000000
+        };
         int[] instructionCache = {
                 0x00000000,
                 0x00625022, // added for testing
@@ -25,25 +28,29 @@ public class Main {
         int cycleCount = 0;
         int programCounter = 0;
         Memory memory = new Memory();
+        IF_Stage if_stage = new IF_Stage(0, 0, initInstruction, 1);
+        ID_Stage id_stage = new ID_Stage(if_stage, memory, 1);
+        EX_Stage ex_stage = new EX_Stage(id_stage, 1);
+        MEM_Stage mem_stage = new MEM_Stage(ex_stage, 1);
+        WB_Stage wb_stage = new WB_Stage(mem_stage, memory, 1);
 
         while (cycleCount < instructionCache.length) {
 
             System.out.println("\n" + cycleCount + " ----------------------------------------------------------------------");
-
             // IF     ------------------------------------------------------------------------------------------------------
-            IF_Stage if_stage = new IF_Stage(cycleCount, programCounter, instructionCache);
+            if_stage = new IF_Stage(cycleCount, programCounter, instructionCache, 0);
 
             // ID     ------------------------------------------------------------------------------------------------------
-            ID_Stage id_stage = new ID_Stage(if_stage, memory);
+            id_stage = new ID_Stage(if_stage, memory, 0);
 
             // EX     ------------------------------------------------------------------------------------------------------
-            EX_Stage ex_stage = new EX_Stage(id_stage);
+            ex_stage = new EX_Stage(id_stage, 0);
 
             // MEM     -----------------------------------------------------------------------------------------------------
-            MEM_Stage mem_stage = new MEM_Stage(ex_stage);
+            mem_stage = new MEM_Stage(ex_stage, 0);
 
             // WB      -----------------------------------------------------------------------------------------------------
-            WB_Stage wb_stage = new WB_Stage(mem_stage, memory);
+            wb_stage = new WB_Stage(mem_stage, memory, 0);
 
             System.out.println("\n" + cycleCount + " ----------------------------------------------------------------------");
 

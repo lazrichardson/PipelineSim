@@ -8,7 +8,7 @@ public class WB_Stage {
     int wbRead_WriteRegNum; // mem end
     ControlSignal memWrite_ControlSignal;
 
-    public WB_Stage(MEM_Stage mem_stage, Memory memory) {
+    public WB_Stage(MEM_Stage mem_stage, Memory memory, int init) {
         memWrite_ControlSignal = mem_stage.memRead_ControlSignal;
         wbRead_LWDataValue = mem_stage.memWrite_LWDataValue;
         wbRead_AluResult = mem_stage.memWrite_AluResult;
@@ -17,7 +17,10 @@ public class WB_Stage {
         if (memWrite_ControlSignal.getRegisterWrite() == 1) {
             memory.Regs[mem_stage.memWrite_WriteRegNum] = mem_stage.memWrite_AluResult;
         }
-        printWBStage();
+
+        if(init == 0) {
+            printWBStage();
+        }
     }
 
     public void printWBStage() {

@@ -11,7 +11,7 @@ public class IF_Stage {
     public IF_Stage() {
     }
 
-    public IF_Stage(int cycleCount, int programCounter, int[] instructionCache) {
+    public IF_Stage(int cycleCount, int programCounter, int[] instructionCache, int init) {
 
         int instruction;
 
@@ -24,7 +24,9 @@ public class IF_Stage {
         this.ifWrite_ProgramCounter = programCounter;
         this.ifWrite_Instruction = instruction;
 
-        System.out.println("\nIF Write\n" + Integer.toHexString(ifWrite_Instruction));
+        if(init == 0) {
+            System.out.println("\nIF Write\n" + Integer.toHexString(ifWrite_Instruction));
+        }
     }
 
     /*

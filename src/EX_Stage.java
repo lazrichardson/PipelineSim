@@ -47,7 +47,7 @@ public class EX_Stage {
         return exWrite_WriteRegNum;
     }
 
-    public  EX_Stage(ID_Stage id_stage) {
+    public  EX_Stage(ID_Stage id_stage, int init) {
         // EX READ------------------------------------------------------------------------------------------------------
         this.exRead_ControlSignal = id_stage.idWrite_ControlSignal;
         this.exRead_ProgramCounter = id_stage.idWrite_ProgramCounter;
@@ -114,8 +114,10 @@ public class EX_Stage {
             exWrite_WriteRegNum = exRead_WriteRegister_20_16;
         }
 
-        printExRead();
-        printExWrite();
+        if(init == 0) {
+            printExRead();
+            printExWrite();
+        }
     }
 
     public void printExRead() {

@@ -19,7 +19,7 @@ public class MEM_Stage {
     int memWrite_AluResult; // mem end
     int memWrite_WriteRegNum; // mem end
 
-    public  MEM_Stage(EX_Stage ex_stage) {
+    public MEM_Stage(EX_Stage ex_stage, int init) {
         // MEM READ-----------------------------------------------------------------------------------------------------
         this.memRead_AluZero = ex_stage.exWrite_AluZero;
         this.memRead_AluResult = ex_stage.exWrite_AluResult;
@@ -31,8 +31,10 @@ public class MEM_Stage {
         memWrite_WriteRegNum = memRead_WriteRegNum;
         memWrite_ControlSignal = memRead_ControlSignal;
 
-        printMemRead();
-        printMemWrite();
+        if (init == 0) {
+            printMemRead();
+            printMemWrite();
+        }
     }
 
     public void printMemRead() {
