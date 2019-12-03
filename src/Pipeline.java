@@ -64,10 +64,13 @@ public class Pipeline {
         memWrite_LWDataValue = 0; // mem end
         memWrite_AluResult = 0; // mem end
         memWrite_WriteRegNum = 0; // mem end
+        memWrite_ControlSignal = new ControlSignal((new Instruction(0x00000000)));
+
         // WB READ
         wbRead_LWDataValue = 0; // mem end
         wbRead_AluResult = 0; // mem end
         wbRead_WriteRegNum = 0; // mem end
+        wbRead_ControlSignal = new ControlSignal((new Instruction(0x00000000)));
     }
 
 
@@ -90,9 +93,9 @@ public class Pipeline {
     }
 
     public void printIfWrite() {
-        System.out.println("\nIF Write");
-        System.out.println("Incr PC  " + Integer.toHexString(ifWrite_ProgramCounter));
-        System.out.println("ifWrite_Instruction  " + Integer.toHexString(ifWrite_Instruction));
+        System.out.println("\nIF/ID Write (written to by the IF stage)");
+        System.out.println("IncrPC = " + Integer.toHexString(ifWrite_ProgramCounter));
+        System.out.println("Inst = " + Integer.toHexString(ifWrite_Instruction));
     }
 
     // ID Stage ------------------------------------------------------------------------------------------------------
@@ -120,6 +123,7 @@ public class Pipeline {
 
     // ID write
     public void idWrite() {
+
         idWriteInstruction = new Instruction(idRead_Instruction);
         idWrite_ControlSignal = new ControlSignal(idWriteInstruction);
         idWrite_ProgramCounter = idRead_ProgramCounter;
@@ -132,19 +136,21 @@ public class Pipeline {
     }
 
     public void printIdRead() {
-        System.out.println("\nID Read");
-        idWriteInstruction.printDetailCodes();
+        System.out.println("\nIF/ID Read (read by the ID stage)");
+        System.out.println("IncrPC = " + Integer.toHexString(idRead_ProgramCounter));
+        System.out.println("Inst = " + Integer.toHexString(idRead_Instruction));
     }
 
     public void printIdWrite() {
-        System.out.println("\nID Write");
-        System.out.println("Incr PC  " + Integer.toHexString(idWrite_ProgramCounter));
-        System.out.println("ReadReg1Value  " + Integer.toHexString(idWrite_ReadData1));
-        System.out.println("ReadReg2Value  " + Integer.toHexString(idWrite_ReadData2));
-        System.out.println("SEOffset  X");
-        System.out.println("WriteReg_20_16  " + idWrite_WriteRegister_20_16);
-        System.out.println("WriteReg_15_11  " + idWrite_WriteRegister_15_11);
-        System.out.println("Function  " + Integer.toHexString(idWrite_RFormatFunc));
+        System.out.println("\nID/EX Write (written to by the ID stage)");
+        idWrite_ControlSignal.printControlSignal();
+        System.out.println("IncrPC = " + Integer.toHexString(idWrite_ProgramCounter));
+        System.out.println("ReadReg1Value = " + Integer.toHexString(idWrite_ReadData1));
+        System.out.println("ReadReg2Value = " + Integer.toHexString(idWrite_ReadData2));
+        System.out.println("SEOffset = X");
+        System.out.println("WriteReg_20_16 = " + idWrite_WriteRegister_20_16);
+        System.out.println("WriteReg_15_11 = " + idWrite_WriteRegister_15_11);
+        System.out.println("Function = " + Integer.toHexString(idWrite_RFormatFunc));
     }
 
     // EX Stage ------------------------------------------------------------------------------------------------------
@@ -237,23 +243,25 @@ public class Pipeline {
     }
 
     public void printExRead() {
-        System.out.println("\nEX Read");
-        System.out.println("Incr PC  " + Integer.toHexString(exRead_ProgramCounter));
-        System.out.println("ReadReg1Value  " + Integer.toHexString(exRead_ReadData1));
-        System.out.println("ReadReg2Value  " + Integer.toHexString(exRead_ReadData2));
-        System.out.println("SEOffset  X");
-        System.out.println("WriteReg_20_16  " + exRead_WriteRegister_20_16);
-        System.out.println("WriteReg_15_11  " + exRead_WriteRegister_15_11);
-        System.out.println("Function  " + Integer.toHexString(exRead_RFormatFunc));
+        System.out.println("\nID/EX Read (read by the EX stage)");
+        exRead_ControlSignal.printControlSignal();
+        System.out.println("Incr PC = " + Integer.toHexString(exRead_ProgramCounter));
+        System.out.println("ReadReg1Value = " + Integer.toHexString(exRead_ReadData1));
+        System.out.println("ReadReg2Value = " + Integer.toHexString(exRead_ReadData2));
+        System.out.println("SEOffset = X");
+        System.out.println("WriteReg_20_16 = " + exRead_WriteRegister_20_16);
+        System.out.println("WriteReg_15_11 = " + exRead_WriteRegister_15_11);
+        System.out.println("Function = " + Integer.toHexString(exRead_RFormatFunc));
     }
 
     public void printExWrite() {
-        System.out.println("\nEX Write");
-        System.out.println("exWrite_CalcBTA  X");
-        System.out.println("exWrite_AluZero  " + exWrite_AluZero);
-        System.out.println("exWrite_AluResult  " + Integer.toHexString(exWrite_AluResult));
-        System.out.println("exWrite_SwValue  " + Integer.toHexString(exWrite_SwValue));
-        System.out.println("exWrite_WriteRegNum  " + exWrite_WriteRegNum);
+        System.out.println("\nEX/MEM Write (written to by the EX stage)");
+        exWrite_ControlSignal.printExMemControlSignal();
+        System.out.println("CalcBTA  X");
+        System.out.println("AluZero  " + exWrite_AluZero);
+        System.out.println("AluResult  " + Integer.toHexString(exWrite_AluResult));
+        System.out.println("SwValue  " + Integer.toHexString(exWrite_SwValue));
+        System.out.println("WriteRegNum  " + exWrite_WriteRegNum);
     }
 
     // MEM Stage ------------------------------------------------------------------------------------------------------
@@ -288,30 +296,32 @@ public class Pipeline {
 
     public void memWrite() {
         // MEM WRITE----------------------------------------------------------------------------------------------------
-        if (memWrite_ControlSignal.getMemoryRead() == 1) {
-            memWrite_AluResult = memory.Main_Mem[exWrite_WriteRegNum];
+        if (this.memWrite_ControlSignal.getMemoryRead() == 1) {
+            this.memWrite_AluResult = memory.Main_Mem[exWrite_WriteRegNum];
         } else {
-            memWrite_AluResult = memRead_AluResult;
+            this.memWrite_AluResult = memRead_AluResult;
         }
-        memWrite_WriteRegNum = memRead_WriteRegNum;
-        memWrite_ControlSignal = memRead_ControlSignal;
+        this.memWrite_WriteRegNum = memRead_WriteRegNum;
+        this.memWrite_ControlSignal = memRead_ControlSignal;
 
     }
 
     public void printMemRead() {
-        System.out.println("\nMEM Read");
-        System.out.println("memRead_CalcBTA  X");
-        System.out.println("memRead_AluZero  " + memRead_AluZero);
-        System.out.println("memRead_AluResult  " + Integer.toHexString(memRead_AluResult));
-        System.out.println("memRead_SwValue  " + Integer.toHexString(memRead_SwValue));
-        System.out.println("memRead_WriteRegNum  " + memRead_WriteRegNum);
+        System.out.println("\nEX/MEM Read (read by the MEM stage)");
+        memRead_ControlSignal.printExMemControlSignal();
+        System.out.println("CalcBTA = X");
+        System.out.println("Zero = " + memRead_AluZero);
+        System.out.println("AluResult = " + Integer.toHexString(memRead_AluResult));
+        System.out.println("SwValue = " + Integer.toHexString(memRead_SwValue));
+        System.out.println("WriteRegNum = " + memRead_WriteRegNum);
     }
 
     public void printMemWrite() {
-        System.out.println("\nMEM Write");
-        System.out.println("memWrite_LWDataValue  " + memWrite_LWDataValue);
-        System.out.println("memRead_AluResult  " + Integer.toHexString(memWrite_AluResult));
-        System.out.println("memRead_WriteRegNum  " + memWrite_WriteRegNum);
+        System.out.println("\nMEM/WB Write (written to by the MEM stage)");
+        memWrite_ControlSignal.printMemControlSignal();
+        System.out.println("LWDataValue = " + memWrite_LWDataValue);
+        System.out.println("AluResult = " + Integer.toHexString(memWrite_AluResult));
+        System.out.println("WriteRegNum = " + memWrite_WriteRegNum);
     }
 
     /* WB STAGE
@@ -321,9 +331,10 @@ public class Pipeline {
     int wbRead_LWDataValue; // mem end
     int wbRead_AluResult; // mem end
     int wbRead_WriteRegNum; // mem end
+    ControlSignal wbRead_ControlSignal;
 
     public void WB_stage() {
-        memWrite_ControlSignal = memRead_ControlSignal;
+        ControlSignal wbRead_ControlSignal = memRead_ControlSignal;
         wbRead_LWDataValue = memWrite_LWDataValue;
         wbRead_AluResult = memWrite_AluResult;
         wbRead_WriteRegNum = memWrite_WriteRegNum;
@@ -333,24 +344,44 @@ public class Pipeline {
         if (memWrite_ControlSignal.getRegisterWrite() == 1) {
             memory.Regs[memWrite_WriteRegNum] = memWrite_AluResult;
         }
+        wbRead_ControlSignal = memWrite_ControlSignal;
+
     }
 
     public void printWbRead() {
-        System.out.println("\nWB Read");
-        System.out.println("wbRead_LWDataValue  " + wbRead_LWDataValue);
-        System.out.println("wbRead_AluResult  " + Integer.toHexString(wbRead_AluResult));
-        System.out.println("wbRead_WriteRegNum  " + wbRead_WriteRegNum);
+        System.out.println("\nMEM/WB Read (read by the WB stage)");
+        wbRead_ControlSignal.printMemControlSignal();
+        System.out.println("LWDataValue  " + wbRead_LWDataValue);
+        System.out.println("AluResult  " + Integer.toHexString(wbRead_AluResult));
+        System.out.println("WriteRegNum  " + wbRead_WriteRegNum);
     }
 
     public void Print_out_everything() {
+        System.out.print("-------------------------------------");
+
         printIfWrite();
+        System.out.print("-------------------------------------");
+
         printIdRead();
+        System.out.print("-------------------------------------");
+
         printIdWrite();
+        System.out.print("-------------------------------------");
+
         printExRead();
+        System.out.print("-------------------------------------");
+
         printExWrite();
+        System.out.print("-------------------------------------");
+
         printMemRead();
+        System.out.print("-------------------------------------");
+
         printMemWrite();
+        System.out.print("-------------------------------------");
+
         printWbRead();
+        System.out.print("-------------------------------------\n");
         memory.regsPrint();
     }
 

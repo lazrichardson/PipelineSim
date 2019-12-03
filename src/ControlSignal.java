@@ -4,7 +4,6 @@ public class ControlSignal {
     private int aluOperation;
 
 
-
     private int memoryRead;
     private int memoryWrite;
     private int branch;
@@ -74,15 +73,28 @@ public class ControlSignal {
     }
 
     public void printControlSignal() {
-        System.out.println("\nRegDst  " + registerDestination);
+        System.out.println("RegDst  " + registerDestination);
         System.out.println("ALUSrc  " + aluSource);
         System.out.println("ALUOp  " + aluOperation);
         System.out.println("MemRead  " + memoryRead);
         System.out.println("MemWrite  " + memoryWrite);
-        System.out.println("branch  " + branch);
+        System.out.println("Branch  " + branch);
         System.out.println("MemToReg  " + memoryToRegister);
         System.out.println("RegWrite  " + registerWrite + "\n");
 
+    }
+
+    public void printExMemControlSignal() {
+        System.out.println("MemRead  " + memoryRead);
+        System.out.println("MemWrite  " + memoryWrite);
+        System.out.println("Branch  " + branch);
+        System.out.println("MemToReg  " + memoryToRegister);
+        System.out.println("RegWrite  " + registerWrite + "\n");
+    }
+
+    public void printMemControlSignal() {
+        System.out.println("MemToReg  " + memoryToRegister);
+        System.out.println("RegWrite  " + registerWrite + "\n");
     }
 }
 

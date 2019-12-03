@@ -6,7 +6,7 @@ public class Main {
 
         while (pipeline.cycleCount < pipeline.instructionCache.length) {
 
-            System.out.println("\n" + pipeline.cycleCount + " ----------------------------------------------------------------------");
+            System.out.println("\nClock Cycle " + pipeline.cycleCount + " ----------------------------------------------------------------------");
 
             pipeline.IF_stage();
             pipeline.ID_stage();
@@ -17,12 +17,9 @@ public class Main {
             pipeline.Print_out_everything();
             pipeline.Copy_write_to_read();
 
-            System.out.println("\n" + pipeline.cycleCount + " ----------------------------------------------------------------------");
-
             // increment all of the counters
             pipeline.cycleCount = pipeline.cycleCount + 1;
             pipeline.programCounter = pipeline.programCounter + 4;
-
         }
     }
 }  // class end
