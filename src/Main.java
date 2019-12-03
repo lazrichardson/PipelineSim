@@ -4,29 +4,25 @@ public class Main {
 
         Pipeline pipeline = new Pipeline();
 
-        while (cycleCount < instructionCache.length) {
+        while (pipeline.cycleCount < pipeline.instructionCache.length) {
 
-            System.out.println("\n" + cycleCount + " ----------------------------------------------------------------------");
-            // IF     ------------------------------------------------------------------------------------------------------
+            System.out.println("\n" + pipeline.cycleCount + " ----------------------------------------------------------------------");
 
+            pipeline.IF_stage();
+            pipeline.ID_stage();
+            pipeline.EX_stage();
+            pipeline.MEM_stage();
+            pipeline.WB_stage();
 
-            // ID     ------------------------------------------------------------------------------------------------------
+            pipeline.Print_out_everything();
+            pipeline.Copy_write_to_read();
 
-            // EX     ------------------------------------------------------------------------------------------------------
-
-
-            // MEM     -----------------------------------------------------------------------------------------------------
-
-
-            // WB      -----------------------------------------------------------------------------------------------------
-
-
-            System.out.println("\n" + cycleCount + " ----------------------------------------------------------------------");
+            System.out.println("\n" + pipeline.cycleCount + " ----------------------------------------------------------------------");
 
             // increment all of the counters
-            cycleCount = cycleCount + 1;
-            programCounter = programCounter + 4;
-            memory.regsPrint();
+            pipeline.cycleCount = pipeline.cycleCount + 1;
+            pipeline.programCounter = pipeline.programCounter + 4;
+
         }
     }
 }  // class end

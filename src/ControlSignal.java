@@ -2,6 +2,9 @@ public class ControlSignal {
 
     private int aluSource;
     private int aluOperation;
+
+
+
     private int memoryRead;
     private int memoryWrite;
     private int branch;
@@ -19,6 +22,10 @@ public class ControlSignal {
 
     public int getRegisterWrite() {
         return registerWrite;
+    }
+
+    public int getMemoryRead() {
+        return memoryRead;
     }
 
     public ControlSignal(Instruction instr) {

@@ -1,26 +1,27 @@
 public class Pipeline {
 
-    Memory memory = new Memory();
-    int cycleCount = 0;
-    int programCounter = 0;
-
-    int[] initInstruction = {
-            0x00000000
-    };
-
+    Memory memory;
+    int cycleCount;
+    int programCounter;
     int[] instructionCache = {
             /* 0x00000000,
              0x00625022, // added for testing
              0x00a63820, // added for testing
                                              */
-            0xa1020000,
+            //0xa1020000,
+
+
             0x810AFFFC,
-            0x00831820,
+/*
+            //0x00831820,
+
             0x01263820,
             0x01224820,
             0x81180000,
             0x81510010,
             0x00624022,
+
+             */
             0x00000000,
             0x00000000,
             0x00000000,
@@ -31,13 +32,60 @@ public class Pipeline {
         memory = new Memory();
         cycleCount = 0;
         programCounter = 0;
+
+        ifWrite_ProgramCounter = 0; // IF start
+        ifWrite_Instruction = 0; // IF start
+
+        idRead_ProgramCounter = 0; // ID start
+        idRead_Instruction = 0; // ID start
+
+        idWrite_ControlSignal = new ControlSignal(new Instruction(0x00000000));
+        idWrite_ProgramCounter = 0; // ID end
+        idWrite_ReadData1 = 0; // ID end
+        idWrite_ReadData2 = 0; // ID end
+        idWrite_SignExtendedOffset = 0;// ID end
+        idWrite_WriteRegister_20_16 = 0; // ID end
+        idWrite_WriteRegister_15_11 = 0; // ID end
+        idWrite_RFormatFunc = 0;
+        // EX READ
+        exRead_ProgramCounter = 0; // EX start
+        exRead_ReadData1 = 0; // EX start
+        exRead_ReadData2 = 0; // EX start
+        exRead_SignExtendedOffset = 0;// EX start
+        exRead_WriteRegister_20_16 = 0; // EX start
+        exRead_WriteRegister_15_11 = 0; // EX start
+        exRead_RFormatFunc = 0;
+        exRead_AluOp = 0;
+        exRead_AluControl = 0;
+        // EX WRITE
+        exWrite_CalcBTA = 0; // DON'T NEED TO IMPLEMENT
+        exWrite_AluZero = 0; // EX end
+        exWrite_AluResult = 0; // EX end
+        exWrite_SwValue = 0; // EX end
+        exWrite_WriteRegNum = 0; // EX end
+        exWrite_ControlSignal = new ControlSignal(new Instruction(0x00000000));
+        // MEM READ
+        memRead_CalcBTA = 0; // DON'T NEED TO IMPLEMENT
+        memRead_AluZero = 0; // EX start
+        memRead_AluResult = 0; // EX start
+        memRead_SwValue = 0; // EX start
+        memRead_WriteRegNum = 0; // EX start
+        // MEM WRITE
+        memWrite_LWDataValue = 0; // mem end
+        memWrite_AluResult = 0; // mem end
+        memWrite_WriteRegNum = 0; // mem end
+        // WB READ
+        wbRead_LWDataValue = 0; // mem end
+        wbRead_AluResult = 0; // mem end
+        wbRead_WriteRegNum = 0; // mem end
     }
+
 
     //  IF Stage------------------------------------------------------------------------------------------------------
     int ifWrite_ProgramCounter; // IF start
     int ifWrite_Instruction; // IF start
 
-    public void ifWrite() {
+    public void IF_stage() {
 
         int instruction;
 
@@ -54,7 +102,7 @@ public class Pipeline {
     public void printIfWrite() {
         System.out.println("\nIF Write");
         System.out.println("Incr PC  " + Integer.toHexString(ifWrite_ProgramCounter));
-        System.out.println("ReadReg1Value  " + Integer.toHexString(ifWrite_Instruction));
+        System.out.println("ifWrite_Instruction  " + Integer.toHexString(ifWrite_Instruction));
     }
 
     // ID Stage ------------------------------------------------------------------------------------------------------
@@ -72,30 +120,30 @@ public class Pipeline {
     int idWrite_WriteRegister_20_16; // ID end
     int idWrite_WriteRegister_15_11; // ID end
     int idWrite_RFormatFunc;
-    Instruction instruction;
+    Instruction idWriteInstruction = new Instruction(0x00000000);
 
     // ID read
-    public void idRead() {
+    public void ID_stage() {
         this.idRead_ProgramCounter = ifWrite_ProgramCounter;
         this.idRead_Instruction = ifWrite_Instruction;
     }
 
     // ID write
     public void idWrite() {
-        instruction = new Instruction(idRead_Instruction);
-        this.idWrite_ControlSignal = new ControlSignal(instruction);
+        idWriteInstruction = new Instruction(idRead_Instruction);
+        idWrite_ControlSignal = new ControlSignal(idWriteInstruction);
         idWrite_ProgramCounter = idRead_ProgramCounter;
-        idWrite_SignExtendedOffset = instruction.iFormatOffset;
-        idWrite_ReadData1 = memory.Regs[instruction.getRegSrcOne()];
-        idWrite_ReadData2 = memory.Regs[instruction.getRegSrcTwo()];
-        idWrite_WriteRegister_15_11 = instruction.rFormatRegDest;
-        idWrite_WriteRegister_20_16 = instruction.getRegSrcTwo();
-        idWrite_RFormatFunc = instruction.rFormatFunc;
+        idWrite_SignExtendedOffset = idWriteInstruction.iFormatOffset;
+        idWrite_ReadData1 = memory.Regs[idWriteInstruction.getRegSrcOne()];
+        idWrite_ReadData2 = memory.Regs[idWriteInstruction.getRegSrcTwo()];
+        idWrite_WriteRegister_15_11 = idWriteInstruction.rFormatRegDest;
+        idWrite_WriteRegister_20_16 = idWriteInstruction.getRegSrcTwo();
+        idWrite_RFormatFunc = idWriteInstruction.rFormatFunc;
     }
 
     public void printIdRead() {
         System.out.println("\nID Read");
-        instruction.printDetailCodes();
+        idWriteInstruction.printDetailCodes();
     }
 
     public void printIdWrite() {
@@ -130,7 +178,7 @@ public class Pipeline {
     int exWrite_SwValue; // EX end
     int exWrite_WriteRegNum; // EX end
 
-    public void exRead() {
+    public void EX_stage() {
         exRead_ControlSignal = idWrite_ControlSignal;
         exRead_ProgramCounter = idWrite_ProgramCounter;
         exRead_ReadData1 = idWrite_ReadData1;
@@ -146,11 +194,11 @@ public class Pipeline {
         exWrite_SwValue = exRead_ReadData2;
 
         // ALU control
-        if (exRead_ControlSignal.getAluOperation() == 0) {
+        if (exWrite_ControlSignal.getAluOperation() == 0) {
             exRead_AluControl = 2;
         }
         // pull it from func
-        else if (exRead_ControlSignal.getAluOperation() == 10) {
+        else if (exWrite_ControlSignal.getAluOperation() == 10) {
 
             int func = exRead_SignExtendedOffset & 0x003F;
             // 100,000 add --> 0010
@@ -167,7 +215,7 @@ public class Pipeline {
             }
         }
         // do the ALU operation
-        if (exRead_ControlSignal.getAluSource() == 1) { // this represents the MUX
+        if (exWrite_ControlSignal.getAluSource() == 1) { // this represents the MUX
             // when asserted, the second ALU operand is the sign extended, lower 16 bits of the instruction
             int aluControlOutput = exRead_SignExtendedOffset;
 
@@ -190,10 +238,10 @@ public class Pipeline {
         }
         // EX RegDst MUX --> output: write reg num
         // when asserted, register destination for write come from bits 15:11
-        if (exRead_ControlSignal.getRegisterDestination() == 1) {
+        if (exWrite_ControlSignal.getRegisterDestination() == 1) {
             exWrite_WriteRegNum = exRead_WriteRegister_15_11;
             // when not asserted, register destination comes from bits 20:16
-        } else if (exRead_ControlSignal.getRegisterDestination() == 0) {
+        } else if (exWrite_ControlSignal.getRegisterDestination() == 0) {
             exWrite_WriteRegNum = exRead_WriteRegister_20_16;
         }
     }
@@ -239,8 +287,7 @@ public class Pipeline {
     int memWrite_AluResult; // mem end
     int memWrite_WriteRegNum; // mem end
 
-    public void memRead() {
-        this.cycleCount = cycleCount;
+    public void MEM_stage() {
         // MEM READ-----------------------------------------------------------------------------------------------------
         this.memRead_AluZero = exWrite_AluZero;
         this.memRead_AluResult = exWrite_AluResult;
@@ -251,9 +298,14 @@ public class Pipeline {
 
     public void memWrite() {
         // MEM WRITE----------------------------------------------------------------------------------------------------
-        memWrite_AluResult = memRead_AluResult;
+        if (memWrite_ControlSignal.getMemoryRead() == 1) {
+            memWrite_AluResult = memory.Main_Mem[exWrite_WriteRegNum];
+        } else {
+            memWrite_AluResult = memRead_AluResult;
+        }
         memWrite_WriteRegNum = memRead_WriteRegNum;
         memWrite_ControlSignal = memRead_ControlSignal;
+
     }
 
     public void printMemRead() {
@@ -280,7 +332,7 @@ public class Pipeline {
     int wbRead_AluResult; // mem end
     int wbRead_WriteRegNum; // mem end
 
-    public void wbRead() {
+    public void WB_stage() {
         memWrite_ControlSignal = memRead_ControlSignal;
         wbRead_LWDataValue = memWrite_LWDataValue;
         wbRead_AluResult = memWrite_AluResult;
@@ -313,7 +365,7 @@ public class Pipeline {
     }
 
     public void Copy_write_to_read() {
-        ifWrite();
+        IF_stage();
         idWrite();
         exWrite();
         memWrite();
