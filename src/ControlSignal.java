@@ -74,14 +74,14 @@ public class ControlSignal {
     }
 
     public void printControlSignal() {
-        System.out.println("\nregisterDestination  " + registerDestination);
-        System.out.println("aluSource  " + aluSource);
-        System.out.println("aluOperation  " + aluOperation);
-        System.out.println("memoryRead  " + memoryRead);
-        System.out.println("memoryWrite  " + memoryWrite);
+        System.out.println("\nRegDst  " + registerDestination);
+        System.out.println("ALUSrc  " + aluSource);
+        System.out.println("ALUOp  " + aluOperation);
+        System.out.println("MemRead  " + memoryRead);
+        System.out.println("MemWrite  " + memoryWrite);
         System.out.println("branch  " + branch);
-        System.out.println("memoryToRegister  " + memoryToRegister);
-        System.out.println("registerWrite  " + registerWrite + "\n");
+        System.out.println("MemToReg  " + memoryToRegister);
+        System.out.println("RegWrite  " + registerWrite + "\n");
 
     }
 }
