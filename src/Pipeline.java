@@ -4,24 +4,14 @@ public class Pipeline {
     int cycleCount;
     int programCounter;
     int[] instructionCache = {
-            /* 0x00000000,
-             0x00625022, // added for testing
-             0x00a63820, // added for testing
-                                             */
-            //0xa1020000,
-
-
+            0xa1020000,
             0x810AFFFC,
-/*
-            //0x00831820,
-
+            0x00831820,
             0x01263820,
             0x01224820,
             0x81180000,
             0x81510010,
             0x00624022,
-
-             */
             0x00000000,
             0x00000000,
             0x00000000,
